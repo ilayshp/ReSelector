@@ -1,0 +1,72 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReSelector", "ReSelector.vcproj", "{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{DD477980-13D0-46D4-84B6-86769ACC484A} = {DD477980-13D0-46D4-84B6-86769ACC484A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C4D96_api_v8", "..\..\resource\_api_lib\_api_v8.vcproj", "{DD477980-13D0-46D4-84B6-86769ACC484A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Intel Demo|Win32 = Intel Demo|Win32
+		Intel Demo|x64 = Intel Demo|x64
+		Intel|Win32 = Intel|Win32
+		Intel|x64 = Intel|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+		ReleseSSE2|Win32 = ReleseSSE2|Win32
+		ReleseSSE2|x64 = ReleseSSE2|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Debug|Win32.Build.0 = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Debug|x64.ActiveCfg = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Intel Demo|Win32.ActiveCfg = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Intel Demo|Win32.Build.0 = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Intel Demo|x64.ActiveCfg = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Intel|Win32.ActiveCfg = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Intel|Win32.Build.0 = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Intel|x64.ActiveCfg = Debug|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Release|Win32.ActiveCfg = Release|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Release|Win32.Build.0 = Release|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Release|x64.ActiveCfg = Release|x64
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.Release|x64.Build.0 = Release|x64
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.ReleseSSE2|Win32.ActiveCfg = Release|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.ReleseSSE2|Win32.Build.0 = Release|Win32
+		{B9455288-AD73-4F86-AA3F-6F3BC602C5A3}.ReleseSSE2|x64.ActiveCfg = Release|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Debug|Win32.Build.0 = Debug|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Debug|x64.ActiveCfg = Debug|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Debug|x64.Build.0 = Debug|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel Demo|Win32.ActiveCfg = Intel Demo|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel Demo|Win32.Build.0 = Intel Demo|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel Demo|x64.ActiveCfg = Intel Demo|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel Demo|x64.Build.0 = Intel Demo|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel|Win32.ActiveCfg = Intel|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel|Win32.Build.0 = Intel|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel|x64.ActiveCfg = Intel|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Intel|x64.Build.0 = Intel|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Release|Win32.ActiveCfg = Release|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Release|Win32.Build.0 = Release|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Release|x64.ActiveCfg = Release|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.Release|x64.Build.0 = Release|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.ReleseSSE2|Win32.ActiveCfg = ReleseSSE2|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.ReleseSSE2|Win32.Build.0 = ReleseSSE2|Win32
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.ReleseSSE2|x64.ActiveCfg = ReleseSSE2|x64
+		{DD477980-13D0-46D4-84B6-86769ACC484A}.ReleseSSE2|x64.Build.0 = ReleseSSE2|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

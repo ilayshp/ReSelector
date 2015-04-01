@@ -1,0 +1,7 @@
+// C4D-StringResource US
+// Identifier	Text
+
+STRINGTABLE
+{
+	IDS_RE_SELECTOR	"ReSelector";
+}
