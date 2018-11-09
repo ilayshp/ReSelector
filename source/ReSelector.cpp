@@ -40,11 +40,11 @@ class ReSelector : public GeDialog
 private:
 
 public:
-	virtual Bool CreateLayout(void);
-	virtual Bool InitValues(void);
-	virtual Bool Command(LONG id,const BaseContainer &msg);
-	//virtual LONG Message(const BaseContainer &msg,BaseContainer &result);
-	virtual Bool CoreMessage  (LONG id,const BaseContainer &msg);
+	virtual Bool CreateLayout();
+	virtual Bool InitValues();
+	virtual Bool Command(Int32 id, const BaseContainer& msg);
+	//virtual Int32 Message(const BaseContainer &msg,BaseContainer &result);
+	virtual Bool CoreMessage  (Int32 id, const BaseContainer& msg);
 };
 //-----------------------------------------------------------------------------
 enum 
@@ -60,249 +60,312 @@ enum
 	IDC_DUMMY_
 };
 //-----------------------------------------------------------------------------
-Bool ReSelector::CreateLayout(void)
+Bool ReSelector::CreateLayout()
 {
 	// first call the parent instance
 	Bool res = GeDialog::CreateLayout();
 
 	SetTitle(GeLoadString(IDS_RE_SELECTOR));
 
-	GroupBegin(0,BFH_SCALEFIT,1,0,"",0);
+	GroupBegin(0, BFH_SCALEFIT, 1, 0, String(), 0);
 	{
-		GroupBorderSpace(4,4,4,4);
+		GroupBorderSpace(4, 4, 4, 4);
 		GroupBorderNoTitle(BORDER_THIN_OUT);
 
-		GroupBegin(0,BFH_SCALEFIT,2,0,"",0);
+		GroupBegin(0, BFH_SCALEFIT, 2, 0, String(), 0);
 		{	
-			AddStaticText(0,BFH_LEFT,0,0,"Type",0);
+			AddStaticText(0, BFH_LEFT, 0, 0, "Type"_s, 0);
 			AddComboBox(IDC_TYPE, BFH_SCALEFIT);
-				AddChild(IDC_TYPE, 0, "Point");
-				AddChild(IDC_TYPE, 1, "Edges");
-				AddChild(IDC_TYPE, 2, "Polygons");
+				AddChild(IDC_TYPE, 0, "Point"_s);
+				AddChild(IDC_TYPE, 1, "Edges"_s);
+				AddChild(IDC_TYPE, 2, "Polygons"_s);
 
-			AddStaticText(0,BFH_LEFT,0,0,"Modus",0);
+			AddStaticText(0, BFH_LEFT, 0, 0, "Modus"_s, 0);
 			AddComboBox(IDC_MODUS, BFH_SCALEFIT);
-				AddChild(IDC_MODUS, 0, "Replace");
-				AddChild(IDC_MODUS, 1, "Add");
-				AddChild(IDC_MODUS, 2, "Sub");
+				AddChild(IDC_MODUS, 0, "Replace"_s);
+				AddChild(IDC_MODUS, 1, "Add"_s);
+				AddChild(IDC_MODUS, 2, "Sub"_s);
 		}
 		GroupEnd();
 
 		AddSeparatorH(0);
 
-		GroupBegin(0,BFH_SCALEFIT,2,0,"",0);
+		GroupBegin(0, BFH_SCALEFIT, 2, 0, String(), 0);
 		{	
-			AddStaticText(0,BFH_LEFT,0,0,"Probability",0);
-			AddEditSlider(IDC_PROB,BFH_SCALEFIT);
+			AddStaticText(0, BFH_LEFT, 0, 0, "Probability"_s, 0);
+			AddEditSlider(IDC_PROB, BFH_SCALEFIT);
 		}
 		GroupEnd();
 
 		AddSeparatorH(0);
 
-		GroupBegin(0,BFH_SCALEFIT,3,0,"",0);
+		GroupBegin(0, BFH_SCALEFIT, 3, 0, String(), 0);
 		{	
 			
-			AddCheckbox(IDC_ASEED,BFH_LEFT,0,0,"Seed");
+			AddCheckbox(IDC_ASEED, BFH_LEFT, 0, 0, "Seed"_s);
 			//AddStaticText(0,BFH_LEFT,0,0,"Seed",0);
-			AddEditNumberArrows(IDC_SEED,BFH_LEFT);
-			AddButton(IDC_RESEED,BFH_FIT,0,0,"Reseed");
+			AddEditNumberArrows(IDC_SEED, BFH_LEFT);
+			AddButton(IDC_RESEED, BFH_FIT, 0, 0, "Reseed"_s);
 		}
 		GroupEnd();
 
 		AddSeparatorH(0);
-		AddButton(IDC_SELECT,BFH_FIT,0,0,"Select");
+		AddButton(IDC_SELECT, BFH_FIT, 0, 0, "Select"_s);
 	}
 	GroupEnd();
 
 	MenuFlushAll();	
-		MenuSubBegin("About");
-			MenuAddString(IDC_INFO,"Remotion 2007");
-			MenuAddString(IDC_INFO,"ReSelector 0.2");
-			MenuAddString(IDC_INFO,"www.remotion4d.net");
+		MenuSubBegin("About"_s);
+			MenuAddString(IDC_INFO, "Remotion 2007"_s);
+			MenuAddString(IDC_INFO, "ReSelector 0.2"_s);
+			MenuAddString(IDC_INFO, "www.remotion4d.net"_s);
 		MenuSubEnd();
 	MenuFinished();
 	return res;
 }
 //-----------------------------------------------------------------------------
-Bool ReSelector::InitValues(void)
+Bool ReSelector::InitValues()
 {
 	// first call the parent instance
-	if (!GeDialog::InitValues()) return FALSE;
+	if (!GeDialog::InitValues()) 
+		return FALSE;
 
-	SetLong(IDC_SEED,0l,0,999999,1,0);
-	SetPercent(IDC_PROB,0.5,0.0);
+	SetInt32(IDC_SEED, 0l, 0, 999999, 1, 0);
+	SetPercent(IDC_PROB, 0.5, 0.0);
 
-	//Enable
-	Bool ased; GetBool(IDC_ASEED,ased);
-	Enable(IDC_SEED,ased);
-	Enable(IDC_RESEED,ased);
+	// Enable
+	Bool ased; 
+	GetBool(IDC_ASEED, ased);
+	Enable(IDC_SEED, ased);
+	Enable(IDC_RESEED, ased);
 
 	return TRUE;
 }
 //-----------------------------------------------------------------------------
-Bool ReSelector::CoreMessage(LONG id,const BaseContainer &msg)
+Bool ReSelector::CoreMessage(Int32 id, const BaseContainer& msg)
 {
 	switch (id)
 	{
 		case EVMSG_TOOLCHANGED:
 			if (CheckCoreMessage(msg))
 			{
-				BaseDocument	*doc = GetActiveDocument(); if(!doc) return FALSE;
-				LONG mode = doc->GetMode();
+				BaseDocument	*doc = GetActiveDocument(); 
+				if (!doc) 
+					return FALSE;
+				Int32 mode = doc->GetMode();
 				
-				switch(mode)
+				switch (mode)
 				{
-					case Mpoints: SetLong(IDC_TYPE,0); break;
-					case Medges: SetLong(IDC_TYPE,1); break;
-					case Mpolygons: SetLong(IDC_TYPE,2); break;
+					case Mpoints: SetInt32(IDC_TYPE, 0); break;
+					case Medges: SetInt32(IDC_TYPE, 1); break;
+					case Mpolygons: SetInt32(IDC_TYPE, 2); break;
 				}
 			}
 			break;
 	}
-	return GeDialog::CoreMessage(id,msg);
+	return GeDialog::CoreMessage(id, msg);
 }
 //-----------------------------------------------------------------------------
 /// This is simple algorithm of ReSelector >>>>>>>>>>>
-Bool ReSelector::Command(LONG id,const BaseContainer &msg)
+Bool ReSelector::Command(Int32 id, const BaseContainer& msg)
 {
-	if(id==IDC_SELECT) // || id==IDC_SEED
+	if (id == IDC_SELECT)
 	{
-		LONG seed; GetLong(IDC_SEED,seed);
-		LONG mode; GetLong(IDC_TYPE,mode);
-		LONG art;  GetLong(IDC_MODUS,art);
-		Real prob; GetReal(IDC_PROB,prob);
-		Bool ased; GetBool(IDC_ASEED,ased);
+		Int32 seed; GetInt32(IDC_SEED, seed);
+		Int32 mode; GetInt32(IDC_TYPE, mode);
+		Int32 art;  GetInt32(IDC_MODUS, art);
+		Float prob; GetFloat(IDC_PROB, prob);
+		Bool ased; GetBool(IDC_ASEED, ased);
 
-		BaseDocument	*doc = GetActiveDocument(); if(!doc) return FALSE;
-		PolygonObject	*ob = (PolygonObject*)doc->GetActiveObject(); if(!ob) return FALSE;
-		Random			rnd; 
-		if(ased) rnd.Init(seed);
-		else rnd.Init(GeGetTimer());
+		BaseDocument	*doc = GetActiveDocument();
+		if (!doc)
+			return FALSE;
+		PolygonObject	*ob = (PolygonObject*)doc->GetActiveObject();
+		if (!ob)
+			return FALSE;
+		Random			rnd;
+		if (ased)
+			rnd.Init(seed);
+		else
+			rnd.Init(GeGetTimer());
 
 
-		switch(mode)
+		switch (mode)
 		{
-		case 0: //point
-			{	
-				if(!ob->IsInstanceOf(Opoint)) return FALSE;
-				BaseSelect *psel = ob->GetPointS(); if(!psel) return FALSE;
+			// point
+			case 0:
+			{
+				if (!ob->IsInstanceOf(Opoint))
+					return FALSE;
 
-				const LONG pcnt = ob->GetPointCount();
-				if(art==0)//Replace
+				BaseSelect *psel = ob->GetPointS();
+				if (!psel)
+					return FALSE;
+
+				const Int32 pcnt = ob->GetPointCount();
+				// Replace
+				if (art == 0)
 				{
-					for(LONG c=0; c<pcnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Select(c);
-						else psel->Deselect(c);
+					for (Int32 c = 0; c < pcnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Select(c);
+						else
+							psel->Deselect(c);
 					}
-				}else if(art==1){ //Add
-					for(LONG c=0; c<pcnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Select(c);
+				}
+				else if (art == 1)
+				{
+					// Add
+					for (Int32 c = 0; c < pcnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Select(c);
 					}
-				}else if(art==2){ //Sub
-					for(LONG c=0; c<pcnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Deselect(c);
+
+				}
+				else if (art == 2)
+				{
+					// Sub
+					for (Int32 c = 0; c < pcnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Deselect(c);
 					}
 				}
 				ob->Message(MSG_UPDATE);
 				EventAdd();
-			}break;
-		case 1: //edge
+				break;
+			}
+
+			// selection of edge
+			case 1:
 			{
-				if(!ob->IsInstanceOf(Opolygon)) return FALSE;
-				
-				//BaseSelect *psel = ob->GetEdgeS(); if(!psel) return FALSE;
+				if (!ob->IsInstanceOf(Opolygon))
+					return FALSE;
 
-				const LONG pcnt = ob->GetPointCount();
-				const Vector* padr = ob->GetPointR(); // R -> ReadOnly
+				// BaseSelect *psel = ob->GetEdgeS(); 
+				// if(!psel) 
+				//	return FALSE;
 
-				const LONG vcnt = ob->GetPolygonCount();
-				const CPolygon* vadr = ob->GetPolygonR(); // R -> ReadOnly
+				const Int32 pcnt = ob->GetPointCount();
+				// const Vector* padr = ob->GetPointR();
 
-				Neighbor	ng;
-				ng.Init(pcnt,vadr,vcnt,NULL);
+				const Int32 vcnt = ob->GetPolygonCount();
+				const CPolygon* vadr = ob->GetPolygonR();
 
-				LONG ecnt = ng.GetEdgeCount();
-				BaseSelect *psel = ob-> GetSelectedEdges(&ng,EDGES_SELECTION); if(!psel) return FALSE;
+				Neighbor ng;
+				ng.Init(pcnt, vadr, vcnt, NULL);
 
-				if(art==0)//Replace
+				Int32 ecnt = ng.GetEdgeCount();
+				BaseSelect *psel = ob->GetSelectedEdges(&ng, EDGESELECTIONTYPE::SELECTION);
+				if (!psel)
+					return FALSE;
+
+				// Replace
+				if (art == 0)
 				{
-					for(LONG c=0; c<ecnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Select(c);
-						else psel->Deselect(c);
-					}
-				}else if(art==1){ //Add
-					for(LONG c=0; c<ecnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Select(c);
-						//else if(psel->IsSelected(c)) psel->Select(c);
-					}
-				}else if(art==2){ //Sub
-					for(LONG c=0; c<ecnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Deselect(c);
-						//else if(psel->IsSelected(c)) psel->Select(c);
+					for (Int32 c = 0; c < ecnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Select(c);
+						else
+							psel->Deselect(c);
 					}
 				}
-				ob->SetSelectedEdges(&ng,psel,EDGES_SELECTION);
+				// add
+				else if (art == 1)
+				{
+					for (Int32 c = 0; c < ecnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Select(c);
+						// else if(psel->IsSelected(c)) psel->Select(c);
+					}
+				}
+				// sub
+				else if (art == 2)
+				{
+					for (Int32 c = 0; c < ecnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Deselect(c);
+						// else if(psel->IsSelected(c)) psel->Select(c);
+					}
+				}
+				ob->SetSelectedEdges(&ng, psel, EDGESELECTIONTYPE::SELECTION);
 				BaseSelect::Free(psel);
-
 				ob->Message(MSG_UPDATE);
 				EventAdd();
-			}break;		
-		case 2: //polygons
+				break;
+			}
+			// polygons
+			case 2:
 			{
-				if(!ob->IsInstanceOf(Opolygon)) return FALSE;
-				BaseSelect *psel = ob->GetPolygonS(); if(!psel) return FALSE;
+				if (!ob->IsInstanceOf(Opolygon))
+					return FALSE;
+				BaseSelect *psel = ob->GetPolygonS();
+				if (!psel)
+					return FALSE;
 
-				const LONG vcnt = ob->GetPolygonCount();
-
-				if(art==0)//Replace
+				const Int32 vcnt = ob->GetPolygonCount();
+				// Replace
+				if (art == 0)
 				{
-					for(LONG c=0; c<vcnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Select(c);
-						else psel->Deselect(c);
+					for (Int32 c = 0; c < vcnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Select(c);
+						else
+							psel->Deselect(c);
 					}
-				}else if(art==1){ //Add
-					for(LONG c=0; c<vcnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Select(c);
+
+				}
+				// Add
+				else if (art == 1)
+				{
+					for (Int32 c = 0; c < vcnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Select(c);
 					}
-				}else if(art==2){ //Sub
-					for(LONG c=0; c<vcnt; ++c)
-					{		
-						if(rnd.Get01() < prob) psel->Deselect(c);
+				}
+				// Sub
+				else if (art == 2)
+				{
+					for (Int32 c = 0; c < vcnt; ++c)
+					{
+						if (rnd.Get01() < prob)
+							psel->Deselect(c);
 					}
 				}
 				ob->Message(MSG_UPDATE);
 				EventAdd();
-			}break;
+				break;
+			}
+			
 		}
 	}
-	else if(id==IDC_RESEED)
+	else if (id == IDC_RESEED)
 	{
-		SetLong(IDC_SEED,(GeGetTimer()*75)%999999,0,999999);
+		SetInt32(IDC_SEED, Int32((GeGetTimer() * 75) % 999999), 0, 999999);
 	}
-	else if(id==IDC_ASEED)
+	else if (id == IDC_ASEED)
 	{
-		//Enable
-		Bool ased; GetBool(IDC_ASEED,ased);
-		Enable(IDC_SEED,ased);
-		Enable(IDC_RESEED,ased);
+		// Enable
+		Bool ased; GetBool(IDC_ASEED, ased);
+		Enable(IDC_SEED, ased);
+		Enable(IDC_RESEED, ased);
 	}
-	else if(id==IDC_INFO)
+	else if (id == IDC_INFO)
 	{
-		GeOpenHTML("http://www.remotion4d.net");
+		GeOpenHTML("http://www.remotion4d.net"_s);
 	}
 	return TRUE;
 } 
 
 //==============================================================================
-///############################# ReSelectorDlg #################################
+//############################# ReSelectorDlg #################################
 //==============================================================================
 class ReSelectorDlg : public CommandData
 {
@@ -310,31 +373,32 @@ class ReSelectorDlg : public CommandData
 		ReSelector dlg;
 	public:
 		virtual Bool Execute(BaseDocument *doc);
-		virtual LONG GetState(BaseDocument *doc);
+		virtual Int32 GetState(BaseDocument *doc);
 		virtual Bool RestoreLayout(void *secret);
 };
 //-----------------------------------------------------------------------------
-LONG ReSelectorDlg::GetState(BaseDocument *doc)
+Int32 ReSelectorDlg::GetState(BaseDocument *doc)
 {
 	return CMD_ENABLED;
 }
 //-----------------------------------------------------------------------------
 Bool ReSelectorDlg::Execute(BaseDocument *doc)
 {
-	return dlg.Open(TRUE,ID_RESELECTOR,-1,-1);
+	return dlg.Open(DLG_TYPE::ASYNC, ID_RESELECTOR, -1, -1);
 }
 //-----------------------------------------------------------------------------
 Bool ReSelectorDlg::RestoreLayout(void *secret)
 {
-	return dlg.RestoreLayout(ID_RESELECTOR,0,secret);
+	return dlg.RestoreLayout(ID_RESELECTOR, 0, secret);
 }
 
-///#############################################################################
-Bool RegisterReSelector(void)
+//#############################################################################
+Bool RegisterReSelector()
 {
 	// decide by name if the plugin shall be registered - just for user convenience
-	String name=GeLoadString(IDS_RE_SELECTOR); if (!name.Content()) return TRUE;
-	return RegisterCommandPlugin(ID_RESELECTOR,name,0,"ReSelector.tif",name,gNew ReSelectorDlg);
+	//String name=GeLoadString(IDS_RE_SELECTOR); if (!name.Content()) return TRUE;
+	//return RegisterCommandPlugin(ID_RESELECTOR,name,0,"ReSelector.tif",name,gNew ReSelectorDlg);
+	return RegisterCommandPlugin(ID_RESELECTOR, String("ReSelector"), 0, nullptr, String(), NewObjClear(ReSelectorDlg));
 }
 
 // Developed by Remotion :)
